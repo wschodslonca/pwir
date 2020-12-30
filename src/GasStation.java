@@ -1,4 +1,4 @@
 public interface GasStation {
 
-    void run();
+    void createAndRun();
 }
