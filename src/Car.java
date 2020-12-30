@@ -1,2 +1,2 @@
-public class Car {
+public interface Car {
 }
