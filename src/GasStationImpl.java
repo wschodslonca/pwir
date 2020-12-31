@@ -1,3 +1,4 @@
+import java.util.Random;
 import java.util.Scanner;
 
 public class GasStationImpl implements GasStation{
@@ -11,7 +12,7 @@ public class GasStationImpl implements GasStation{
         this.controller = new GasStationControllerImpl(this.pumps.length);
 
         for (int i = 0; i < pumps.length; i++) {
-            pumps[i] = new GasPumpImpl();
+            pumps[i] = new GasPumpImpl(i);
         }
         printMenu();
         Scanner scanner = new Scanner(System.in);
@@ -19,8 +20,15 @@ public class GasStationImpl implements GasStation{
         while (true){
             switch (written_from_input) {
                 case "1" -> {
-                    CarImpl car = new CarImpl(this.controller);
-                    car.start();
+                    int carAmount = scanner.nextInt();
+                    Random random = new Random();
+                    while (carAmount>0){
+                        CarImpl car = new CarImpl(this.pumps[this.controller.getPump()]);
+                        System.out.println("New car created "+car.getId()+" and has been added to pump queue "+car.hisPump.pumpId);
+                        car.start();
+                        UtilityClass.wait(random.nextInt(10)*1000);
+                        carAmount--;
+                    }
                     written_from_input = scanner.nextLine();
                 }
                 case "q" -> System.exit(0);

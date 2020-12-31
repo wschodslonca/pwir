@@ -1,11 +1,12 @@
 public class GasStationControllerImpl extends Thread implements GasStationController{
 
-    int nextPumpToUse;
     int [] pumpLengths;
 
     GasStationControllerImpl(int pumpLength){
-        this.nextPumpToUse = 1;
         this.pumpLengths = new int[pumpLength];
+        for (int i = 0;i<pumpLength;i++){
+            pumpLengths[i] = 0;
+        }
     }
     @Override
     public void run() {
@@ -14,28 +15,9 @@ public class GasStationControllerImpl extends Thread implements GasStationContro
 
     @Override
     public int getPump() {
-        return getIndexOfMin(pumpLengths);
+        int pumpId = UtilityClass.getIndexOfMin(pumpLengths);
+        this.pumpLengths[pumpId]++;
+        return pumpId;
     }
 
-    @Override
-    public void setPump() {
-
-    }
-
-    @Override
-    public int getIndexOfMin(int[] tab) {
-        int tablen = tab.length;
-        if (tablen>0) {
-            int i = 0;
-            int minv = tab[0];
-            for (int j = 1; j < tab.length; j++) {
-                if(tab[j]<minv) {
-                    minv = tab[j];
-                    i = j;
-                }
-            }
-            return i;
-        }
-        return -1;
-    }
 }

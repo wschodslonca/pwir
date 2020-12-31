@@ -1,4 +1,4 @@
 public interface GasPump {
 
-    void fillFuel(CarImpl car);
+    void fillFuel(CarImpl car) throws InterruptedException;
 }
