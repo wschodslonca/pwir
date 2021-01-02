@@ -15,11 +15,6 @@ public class CarImpl extends Thread implements Car{
         }
     }
 
-    public CarImpl(double maxAmount){
-        this.maxAmount = maxAmount;
-        this.gasAmount = 0;
-    }
-
     public CarImpl(GasPumpImpl gasPump){
         Random random = new Random();
         this.gasAmount = 0;
@@ -28,6 +23,7 @@ public class CarImpl extends Thread implements Car{
         hisPump.carsQueue.add(this);
     }
 
+    @Override
     public void fillFuel() throws InterruptedException {
         this.hisPump.fillFuel(this);
     }

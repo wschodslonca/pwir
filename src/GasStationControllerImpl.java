@@ -8,6 +8,7 @@ public class GasStationControllerImpl extends Thread implements GasStationContro
             pumpLengths[i] = 0;
         }
     }
+
     @Override
     public void run() {
         super.run();

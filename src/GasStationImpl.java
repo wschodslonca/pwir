@@ -10,7 +10,7 @@ public class GasStationImpl implements GasStation{
     public void createAndRun() {
         this.pumps = new GasPumpImpl[3];
         this.controller = new GasStationControllerImpl(this.pumps.length);
-
+        this.controller.start();
         for (int i = 0; i < pumps.length; i++) {
             pumps[i] = new GasPumpImpl(i);
         }
@@ -40,7 +40,9 @@ public class GasStationImpl implements GasStation{
             }
         }
     }
-    void printMenu(){
+
+    @Override
+    public void printMenu(){
         System.out.println("1 : add new Car");
         System.out.println("q : to end Main process");
     }
