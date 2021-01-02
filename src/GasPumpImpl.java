@@ -12,11 +12,11 @@ public class GasPumpImpl implements GasPump{
         System.out.println("Kolejka "+ pumpId+ " "+this.carsQueue);
         this.semaphore.acquire();
         while(car.gasAmount < car.maxAmount){
-            car.gasAmount += 0.5;
+            car.gasAmount += 0.1;
             if (car.gasAmount> car.maxAmount){
                 car.gasAmount = car.maxAmount;
             }
-            //System.out.println("Car thread id = "+car.getId()+" "+car);
+            System.out.println("Car thread id = "+car.getId()+" "+car);
             UtilityClass.wait(100);
         }
         System.out.println("Car "+car.getId()+" finished fueling");
