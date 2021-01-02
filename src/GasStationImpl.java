@@ -25,7 +25,6 @@ public class GasStationImpl implements GasStation{
                     Random random = new Random();
                     while (carAmount>0){
                         CarImpl car = new CarImpl(this.pumps[this.controller.getPump()]);
-                        System.out.println(""+this.controller.pumpLengths[0]+this.controller.pumpLengths[1]+this.controller.pumpLengths[2]);
                         System.out.println("New car nr "+car.getId()+" appeared and has been assigned to pump queue nr "+car.hisPump.pumpId);
                         car.start();
                         UtilityClass.wait(random.nextInt(10)*1000);

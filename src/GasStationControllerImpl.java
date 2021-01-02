@@ -12,7 +12,7 @@ public class GasStationControllerImpl extends Thread implements GasStationContro
     }
 
     @Override
-    public int getPump() {
+    public synchronized int getPump() {
         return UtilityClass.getIndexOfMin(pumps);
     }
 

@@ -12,7 +12,7 @@ public class GasPumpImpl implements GasPump{
         System.out.println("Kolejka "+ pumpId+ " "+this.carsQueue);
         this.semaphore.acquire();
         while(car.gasAmount < car.maxAmount){
-            car.gasAmount += 0.1;
+            car.gasAmount += 0.5;
             if (car.gasAmount> car.maxAmount){
                 car.gasAmount = car.maxAmount;
             }
@@ -34,6 +34,7 @@ public class GasPumpImpl implements GasPump{
     @Override
     public String toString() {
         return "GasPumpImpl{" +
-                "pumpId=" + pumpId;
+                "pumpId=" + pumpId +
+                '}';
     }
 }
