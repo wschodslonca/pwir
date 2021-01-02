@@ -12,14 +12,14 @@ public class UtilityClass {
         }
     }
 
-    public static int getIndexOfMin(int[] tab) {
-        int tablen = tab.length;
+    public static int getIndexOfMin(GasPumpImpl [] pumps) {
+        int tablen = pumps.length;
         if (tablen>0) {
             int i = 0;
-            int minv = tab[0];
-            for (int j = 1; j < tab.length; j++) {
-                if(tab[j]<minv) {
-                    minv = tab[j];
+            int minv = pumps[0].carsQueue.size();
+            for (int j = 1; j < tablen; j++) {
+                if(pumps[j].carsQueue.size()<minv) {
+                    minv = pumps[j].carsQueue.size();
                     i = j;
                 }
             }

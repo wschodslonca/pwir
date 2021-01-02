@@ -9,7 +9,7 @@ public class GasStationImpl implements GasStation{
     @Override
     public void createAndRun() {
         this.pumps = new GasPumpImpl[3];
-        this.controller = new GasStationControllerImpl(this.pumps.length);
+        this.controller = new GasStationControllerImpl(this.pumps);
         this.controller.start();
         for (int i = 0; i < pumps.length; i++) {
             pumps[i] = new GasPumpImpl(i);

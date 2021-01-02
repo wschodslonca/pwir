@@ -9,17 +9,18 @@ public class GasPumpImpl implements GasPump{
     List<CarImpl> carsQueue;
     @Override
     public void fillFuel(CarImpl car) throws InterruptedException {
-        //System.out.println(this.carsQueue);
+        System.out.println("Kolejka "+ pumpId+ " "+this.carsQueue);
         this.semaphore.acquire();
         while(car.gasAmount < car.maxAmount){
-            car.gasAmount += 0.5;
+            car.gasAmount += 0.1;
             if (car.gasAmount> car.maxAmount){
                 car.gasAmount = car.maxAmount;
             }
-            System.out.println("Car "+car.getId()+" "+car);
-            UtilityClass.wait(500);
+            //System.out.println("Car thread id = "+car.getId()+" "+car);
+            UtilityClass.wait(100);
         }
         System.out.println("Car "+car.getId()+" finished fueling");
+        this.carsQueue.remove(0);
         this.semaphore.release();
     }
 
@@ -33,7 +34,6 @@ public class GasPumpImpl implements GasPump{
     @Override
     public String toString() {
         return "GasPumpImpl{" +
-                "pumpId=" + pumpId +
-                '}';
+                "pumpId=" + pumpId;
     }
 }

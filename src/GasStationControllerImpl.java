@@ -1,12 +1,9 @@
 public class GasStationControllerImpl extends Thread implements GasStationController{
 
-    int [] pumpLengths;
+    GasPumpImpl [] pumps;
 
-    GasStationControllerImpl(int pumpLength){
-        this.pumpLengths = new int[pumpLength];
-        for (int i = 0;i<pumpLength;i++){
-            pumpLengths[i] = 0;
-        }
+    GasStationControllerImpl(GasPumpImpl [] pumps){
+        this.pumps = pumps;
     }
 
     @Override
@@ -15,10 +12,8 @@ public class GasStationControllerImpl extends Thread implements GasStationContro
     }
 
     @Override
-    synchronized public int getPump() {
-        int pumpId = UtilityClass.getIndexOfMin(pumpLengths);
-        this.pumpLengths[pumpId]++;
-        return pumpId;
+    public int getPump() {
+        return UtilityClass.getIndexOfMin(pumps);
     }
 
 }
