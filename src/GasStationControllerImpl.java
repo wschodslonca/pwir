@@ -15,7 +15,7 @@ public class GasStationControllerImpl extends Thread implements GasStationContro
     }
 
     @Override
-    public int getPump() {
+    synchronized public int getPump() {
         int pumpId = UtilityClass.getIndexOfMin(pumpLengths);
         this.pumpLengths[pumpId]++;
         return pumpId;

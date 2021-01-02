@@ -12,12 +12,12 @@ public class GasPumpImpl implements GasPump{
         //System.out.println(this.carsQueue);
         this.semaphore.acquire();
         while(car.gasAmount < car.maxAmount){
-            car.gasAmount += 0.1;
+            car.gasAmount += 0.5;
             if (car.gasAmount> car.maxAmount){
                 car.gasAmount = car.maxAmount;
             }
-            System.out.println("Car thread id = "+car.getId()+" "+car);
-            UtilityClass.wait(100);
+            System.out.println("Car "+car.getId()+" "+car);
+            UtilityClass.wait(500);
         }
         System.out.println("Car "+car.getId()+" finished fueling");
         this.semaphore.release();
@@ -33,6 +33,7 @@ public class GasPumpImpl implements GasPump{
     @Override
     public String toString() {
         return "GasPumpImpl{" +
-                "pumpId=" + pumpId;
+                "pumpId=" + pumpId +
+                '}';
     }
 }
