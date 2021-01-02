@@ -5,29 +5,34 @@ public class CarImpl extends Thread implements Car{
     double gasAmount;
     double maxAmount;
     GasPumpImpl hisPump;
-    final Object lock;
+    final Object controllerLock;
+    final Object gasPumpLock;
     GasStationControllerImpl controller;
 
     @Override
     public void run() {
         try {
-            this.fillFuel();
+            synchronized (this.gasPumpLock) {
+                gasPumpLock.notify();
+                this.fillFuel();
+            }
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        synchronized (this.lock){
-            lock.notify();
+        synchronized (this.controllerLock){
+            controllerLock.notify();
             this.controller.payment(this.maxAmount);
         }
     }
 
-    public CarImpl(Object lock,GasStationControllerImpl controller){
+    public CarImpl(Object controllerLock, GasStationControllerImpl controller){
         Random random = new Random();
         this.gasAmount = 0;
         this.maxAmount = 35*Math.round(random.nextDouble()*10.0)/10.0+5;
-        hisPump = controller.pumps[controller.getPump()];
+        this.hisPump = controller.pumps[controller.getPump()];
+        this.gasPumpLock = hisPump.gasPumpLock;
         hisPump.carsQueue.add(this);
-        this.lock = lock;
+        this.controllerLock = controllerLock;
         this.controller = controller;
     }
 
