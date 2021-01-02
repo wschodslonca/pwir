@@ -2,14 +2,33 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Semaphore;
 
-public class GasPumpImpl implements GasPump{
+public class GasPumpImpl extends Thread implements GasPump{
 
     int pumpId;
     Semaphore semaphore;
     List<CarImpl> carsQueue;
+    final Object gasPumpLock;
+
+    public void gasPumpWait() {
+        synchronized (this.gasPumpLock) {
+            try {
+                System.out.println("gasPump id="+this.pumpId+" waiting...");
+                this.gasPumpLock.wait();
+            }
+            catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @Override
+    public void run() {
+        this.gasPumpWait();
+    }
     @Override
     public void fillFuel(CarImpl car) throws InterruptedException {
         //System.out.println("Kolejka "+ pumpId+ " "+this.carsQueue);
+        System.out.println("gasPump id="+this.pumpId+" working.");
         this.semaphore.acquire();
         while(car.gasAmount < car.maxAmount){
             car.gasAmount += 0.1;
@@ -22,14 +41,15 @@ public class GasPumpImpl implements GasPump{
         System.out.println("Car "+car.getId()+" finished fueling");
         this.carsQueue.remove(0);
         this.semaphore.release();
+        this.gasPumpWait();
     }
 
-    public GasPumpImpl(int pumpId) {
+    public GasPumpImpl(int pumpId, Object gasPumpLock) {
         this.semaphore = new Semaphore(1,true);
         carsQueue = new ArrayList<>();
         this.pumpId = pumpId;
+        this.gasPumpLock = gasPumpLock;
     }
-
 
     @Override
     public String toString() {
