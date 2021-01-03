@@ -9,6 +9,7 @@ public class GasPumpImpl extends Thread implements GasPump{
     List<CarImpl> carsQueue;
     final Object gasPumpLock;
 
+    @Override
     public void gasPumpWait() {
         synchronized (this.gasPumpLock) {
             try {

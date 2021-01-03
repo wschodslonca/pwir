@@ -10,6 +10,7 @@ public class GasStationControllerImpl extends Thread implements GasStationContro
         this.cash = 0.0;
     }
 
+    @Override
     public void controllerWait(){
         synchronized (this.controllerLock){
             try {
@@ -34,8 +35,8 @@ public class GasStationControllerImpl extends Thread implements GasStationContro
     }
 
     public void payment(double fuelAmount){
-        double moneytoPay = fuelAmount*4.4;
-        this.cash += Math.round((moneytoPay) * 100.0) / 100.0;
+        double moneyToPay = fuelAmount*4.4;
+        this.cash += Math.round((moneyToPay) * 100.0) / 100.0;
         System.out.println("Station money = " + Math.round((this.cash) * 100.0) / 100.0);
     }
 }
