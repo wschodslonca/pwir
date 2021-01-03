@@ -23,8 +23,11 @@ public class GasPumpImpl extends Thread implements GasPump{
 
     @Override
     public void run() {
-        this.gasPumpWait();
+        while (true){
+            this.gasPumpWait();
+        }
     }
+
     @Override
     public void fillFuel(CarImpl car) throws InterruptedException {
         //System.out.println("Kolejka "+ pumpId+ " "+this.carsQueue);
@@ -41,7 +44,6 @@ public class GasPumpImpl extends Thread implements GasPump{
         System.out.println("Car "+car.getId()+" finished fueling");
         this.carsQueue.remove(0);
         this.semaphore.release();
-        this.gasPumpWait();
     }
 
     public GasPumpImpl(int pumpId, Object gasPumpLock) {

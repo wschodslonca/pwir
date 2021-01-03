@@ -21,7 +21,7 @@ public class GasStationImpl implements GasStation{
         String written_from_input = scanner.nextLine();
         while (true){
             switch (written_from_input) {
-                case "1" -> {
+                case "o" -> {
                     System.out.println("How many cars do you want to accept?");
                     int carAmount = scanner.nextInt();
                     Random random = new Random();
@@ -35,7 +35,7 @@ public class GasStationImpl implements GasStation{
                     written_from_input = scanner.nextLine();
                 }
                 case "q" -> {
-                    System.out.println("Total cash earned: "+controller.cash);
+                    System.out.println("Total cash earned: "+Math.round((controller.cash) * 100.0) / 100.0);
                     System.exit(0);
                 }
 
@@ -48,7 +48,7 @@ public class GasStationImpl implements GasStation{
 
     @Override
     public void printMenu(){
-        System.out.println("1 : open station");
+        System.out.println("o : open station");
         System.out.println("q : close station");
     }
 

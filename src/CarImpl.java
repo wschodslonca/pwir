@@ -16,13 +16,14 @@ public class CarImpl extends Thread implements Car{
                 gasPumpLock.notify();
                 this.fillFuel();
             }
+            synchronized (this.controllerLock){
+                controllerLock.notify();
+                this.controller.payment(this.maxAmount);
+            }
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        synchronized (this.controllerLock){
-            controllerLock.notify();
-            this.controller.payment(this.maxAmount);
-        }
+
     }
 
     public CarImpl(Object controllerLock, GasStationControllerImpl controller){

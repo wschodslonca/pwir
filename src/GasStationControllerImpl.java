@@ -1,28 +1,30 @@
 public class GasStationControllerImpl extends Thread implements GasStationController{
 
     GasPumpImpl [] pumps;
-    final Object lock;
+    final Object controllerLock;
     double cash;
 
-    GasStationControllerImpl(GasPumpImpl [] pumps,Object lock){
+    GasStationControllerImpl(GasPumpImpl [] pumps,Object controllerLock) {
         this.pumps = pumps;
-        this.lock = lock;
+        this.controllerLock = controllerLock;
         this.cash = 0.0;
+    }
+
+    public void controllerWait(){
+        synchronized (this.controllerLock){
+            try {
+                System.out.println("Controller waiting...");
+                controllerLock.wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     @Override
     public void run() {
-        while (true){
-            synchronized (this.lock){
-                try {
-                    System.out.println("wait");
-                    lock.wait();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                System.out.println("active");
-                System.out.println("Station money = "+this.cash);
-            }
+        while (true) {
+            this.controllerWait();
         }
     }
 
@@ -32,6 +34,8 @@ public class GasStationControllerImpl extends Thread implements GasStationContro
     }
 
     public void payment(double fuelAmount){
-        this.cash+= fuelAmount*4.3;
+        double moneytoPay = fuelAmount*4.4;
+        this.cash += Math.round((moneytoPay) * 100.0) / 100.0;
+        System.out.println("Station money = " + Math.round((this.cash) * 100.0) / 100.0);
     }
 }
