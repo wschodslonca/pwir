@@ -46,7 +46,7 @@ public class GasPumpImpl extends Thread implements GasPump{
         }
     }
 
-    public GasPumpImpl(int pumpId, Object gasPumpLock) {
+    public GasPumpImpl(int pumpId) {
         this.semaphore = new Semaphore(1,true);
         carsQueue = new ArrayList<>();
         this.pumpId = pumpId;

@@ -52,7 +52,7 @@ public class CarImpl extends Thread implements Car{
         }
     }
 
-    public CarImpl(Object controllerLock, GasStationControllerImpl controller){
+    public CarImpl(GasStationControllerImpl controller){
         Random random = new Random();
         this.gasAmount = 0;
         this.maxAmount = 35*Math.round(random.nextDouble()*10.0)/10.0+5;

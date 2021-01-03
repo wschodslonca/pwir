@@ -8,12 +8,11 @@ public class GasStationImpl implements GasStation{
 
     @Override
     public void createAndRun() {
-        Object controllerLock = new Object();
         this.pumps = new GasPumpImpl[3];
         this.controller = new GasStationControllerImpl(this.pumps);
         this.controller.start();
         for (int i = 0; i < pumps.length; i++) {
-            pumps[i] = new GasPumpImpl(i,new Object());
+            pumps[i] = new GasPumpImpl(i);
             pumps[i].start();
         }
         UtilityClass.wait(200);
@@ -27,7 +26,7 @@ public class GasStationImpl implements GasStation{
                     int carAmount = scanner.nextInt();
                     Random random = new Random();
                     while (carAmount>0){
-                        CarImpl car = new CarImpl(controllerLock,this.controller);
+                        CarImpl car = new CarImpl(this.controller);
                         System.out.println("A new car nr "+car.getId()+" appeared and has been assigned to pump queue nr "+car.hisPump.pumpId);
                         car.start();
                         UtilityClass.wait(random.nextInt(10)*1000);
