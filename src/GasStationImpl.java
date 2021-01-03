@@ -10,12 +10,13 @@ public class GasStationImpl implements GasStation{
     public void createAndRun() {
         Object controllerLock = new Object();
         this.pumps = new GasPumpImpl[3];
-        this.controller = new GasStationControllerImpl(this.pumps,controllerLock);
+        this.controller = new GasStationControllerImpl(this.pumps);
         this.controller.start();
         for (int i = 0; i < pumps.length; i++) {
             pumps[i] = new GasPumpImpl(i,new Object());
             pumps[i].start();
         }
+        UtilityClass.wait(200);
         printMenu();
         Scanner scanner = new Scanner(System.in);
         String written_from_input = scanner.nextLine();

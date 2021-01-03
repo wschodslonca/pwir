@@ -3,28 +3,26 @@ import java.util.List;
 import java.util.concurrent.Semaphore;
 
 public class GasPumpImpl extends Thread implements GasPump{
-
     int pumpId;
     Semaphore semaphore;
     List<CarImpl> carsQueue;
-    final Object gasPumpLock;
-
-    public void gasPumpWait() {
-        synchronized (this.gasPumpLock) {
-            try {
-                System.out.println("gasPump id="+this.pumpId+" waiting...");
-                this.gasPumpLock.wait();
-            }
-            catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-    }
 
     @Override
     public void run() {
         while (true){
-            this.gasPumpWait();
+            synchronized (this) {
+                try {
+                    System.out.println("gasPump id=" + this.pumpId + " waiting...");
+                    this.wait();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    this.fillFuel(this.carsQueue.get(0));
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 
@@ -42,15 +40,16 @@ public class GasPumpImpl extends Thread implements GasPump{
             UtilityClass.wait(100);
         }
         System.out.println("Car "+car.getId()+" finished fueling");
-        this.carsQueue.remove(0);
         this.semaphore.release();
+        synchronized (this.carsQueue.get(0)) {
+            this.carsQueue.get(0).notify();
+        }
     }
 
     public GasPumpImpl(int pumpId, Object gasPumpLock) {
         this.semaphore = new Semaphore(1,true);
         carsQueue = new ArrayList<>();
         this.pumpId = pumpId;
-        this.gasPumpLock = gasPumpLock;
     }
 
     @Override

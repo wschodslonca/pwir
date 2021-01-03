@@ -4,26 +4,52 @@ public class CarImpl extends Thread implements Car{
 
     double gasAmount;
     double maxAmount;
-    GasPumpImpl hisPump;
-    final Object controllerLock;
-    final Object gasPumpLock;
-    GasStationControllerImpl controller;
+    final GasPumpImpl hisPump;
+    final GasStationControllerImpl controller;
 
     @Override
     public void run() {
-        try {
-            synchronized (this.gasPumpLock) {
-                gasPumpLock.notify();
-                this.fillFuel();
+        if (this.hisPump.carsQueue.get(0) != this){
+            synchronized (this) {
+                try {
+                    this.wait();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
-            synchronized (this.controllerLock){
-                controllerLock.notify();
-                this.controller.payment(this.maxAmount);
-            }
-        } catch (InterruptedException e) {
-            e.printStackTrace();
         }
-
+        System.out.println("Car " + this.getId() + " at pump nr " + this.hisPump.pumpId);
+        synchronized (this.hisPump) {
+            this.hisPump.notify();
+        }
+        synchronized (this) {
+            while (this.gasAmount < this.maxAmount){
+                try {
+                    this.wait();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        synchronized (this.controller){
+            System.out.println("Car " + this.getId() + " paying...");
+            this.controller.fuel = maxAmount;
+            this.controller.pump = this.hisPump.pumpId;
+            this.controller.notify();
+        }
+        synchronized (this) {
+            try {
+                this.wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        this.hisPump.carsQueue.remove(0);
+        if (!this.hisPump.carsQueue.isEmpty()){
+             synchronized (this.hisPump.carsQueue.get(0)){
+                this.hisPump.carsQueue.get(0).notify();
+            }
+        }
     }
 
     public CarImpl(Object controllerLock, GasStationControllerImpl controller){
@@ -31,9 +57,7 @@ public class CarImpl extends Thread implements Car{
         this.gasAmount = 0;
         this.maxAmount = 35*Math.round(random.nextDouble()*10.0)/10.0+5;
         this.hisPump = controller.pumps[controller.getPump()];
-        this.gasPumpLock = hisPump.gasPumpLock;
-        hisPump.carsQueue.add(this);
-        this.controllerLock = controllerLock;
+        this.hisPump.carsQueue.add(this);
         this.controller = controller;
     }
 
